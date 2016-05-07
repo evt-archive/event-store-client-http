@@ -4,7 +4,7 @@ module EventStore
       class Slice
         include Schema::DataStructure
 
-        attribute :entries, Array[Entry]
+        attribute :entries, Array
         attribute :links, Links
 
         def each(direction, &action)
