@@ -37,24 +37,16 @@ module EventStore
           end
 
           def self.instance(data)
-            links = self.links data['links']
+            links = self.links data[:links]
 
-            entries = self.entries data['entries']
+            entries = self.entries data[:entries]
 
             Slice.build :entries => entries, :links => links
           end
 
           def self.entries(entry_datum)
             entry_datum.map do |entry_data|
-              entry = Entry.new
-
-              entry.position = entry_data['position_event_number']
-
-              entry_data['links'].each do |link_data|
-                entry.event_uri = link_data['uri'] if link_data['relation'] == 'edit'
-              end
-
-              entry
+              Serialize::Read.instance entry_data, EventData::Read
             end
           end
 
@@ -62,10 +54,10 @@ module EventStore
             links = Links.new
 
             links_data.each do |link_data|
-              if link_data['relation'] == 'previous'
-                links.next_uri = link_data['uri']
-              elsif link_data['relation'] == 'next'
-                links.previous_uri = link_data['uri']
+              if link_data[:relation] == 'previous'
+                links.next_uri = link_data[:uri]
+              elsif link_data[:relation] == 'next'
+                links.previous_uri = link_data[:uri]
               end
             end
 
@@ -74,7 +66,7 @@ module EventStore
 
           module JSON
             def self.deserialize(text)
-              formatted_data = ::JSON.parse text
+              formatted_data = ::JSON.parse text, symbolize_names: true
               Casing::Underscore.(formatted_data)
             end
           end

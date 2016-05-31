@@ -111,7 +111,7 @@
 
         module Defaults
           def self.embed
-            'rich'
+            'body'
           end
 
           def self.starting_position(direction=nil)

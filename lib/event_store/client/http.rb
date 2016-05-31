@@ -14,7 +14,6 @@ require 'telemetry/logger'
 
 require 'event_store/client/http/settings'
 
-require 'event_store/client/http/slice/entry'
 require 'event_store/client/http/slice/links'
 require 'event_store/client/http/slice'
 

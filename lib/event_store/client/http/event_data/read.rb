@@ -34,6 +34,7 @@ module EventStore
                 :data => content[:data],
                 :links => links,
                 :number => content[:event_number],
+                :position => data[:position_event_number],
                 :stream_name => content[:event_stream_id],
                 :type => content[:event_type]
               )
