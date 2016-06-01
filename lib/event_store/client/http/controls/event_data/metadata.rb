@@ -16,6 +16,10 @@ module EventStore
                   'someMetaAttribute' => 'some meta value'
                 }
               end
+
+              def self.text
+                ::JSON.generate data
+              end
             end
           end
         end

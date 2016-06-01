@@ -10,6 +10,11 @@ context "Stream Slice" do
       assert slice.entries[1].data.key?(:some_attribute)
     end
 
+    test "Metadata" do
+      assert slice.entries[0].metadata.key?(:some_meta_attribute)
+      assert slice.entries[1].metadata.key?(:some_meta_attribute)
+    end
+
     test "Position" do
       assert slice.entries[0].position == 1
       assert slice.entries[1].position == 0
