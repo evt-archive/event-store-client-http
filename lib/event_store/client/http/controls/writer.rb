@@ -3,8 +3,9 @@ module EventStore
     module HTTP
       module Controls
         module Writer
-          def self.write(iterations=nil, stream_name=nil, stream_metadata: nil, verbatim_stream_name: nil)
+          def self.write(iterations=nil, stream_name=nil, metadata: nil, stream_metadata: nil, verbatim_stream_name: nil)
             iterations ||= 1
+            metadata = true if metadata.nil?
             verbatim_stream_name ||= false
 
             unless verbatim_stream_name
@@ -20,7 +21,7 @@ module EventStore
 
               id = ::Controls::ID.get(iteration)
 
-              event_data = Controls::EventData::Batch.example(id)
+              event_data = Controls::EventData::Batch.example(id, metadata: metadata)
 
               json_text = Serialize::Write.(event_data, :json)
 

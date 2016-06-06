@@ -4,7 +4,7 @@ module EventStore
       module Controls
         module EventData
           module Read
-            def self.data(number=nil, time: nil, stream_name: nil, metadata: nil, type: nil, omit_metadata: nil)
+            def self.data(number=nil, time: nil, stream_name: nil, metadata: nil, type: nil, omit_metadata: nil, position: nil)
               reference_time = ::Controls::Time.reference
 
               number ||= 0
@@ -12,8 +12,8 @@ module EventStore
               stream_name ||= StreamName.reference
               type ||= 'SomeEvent'
               metadata ||= Metadata.data
-
               omit_metadata ||= false
+              position ||= number
 
               data = {
                 :updated => reference_time,
@@ -27,6 +27,7 @@ module EventStore
                   },
                   :metadata => metadata
                 },
+                :position_event_number => position,
                 :links => [
                   {
                     :uri => "http://localhost:2113/streams/#{stream_name}/#{number}",

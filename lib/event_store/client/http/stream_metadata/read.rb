@@ -44,7 +44,9 @@ module EventStore
               return nil
             end
 
-            response = ::HTTP::Commands::Get.(uri, headers, connection: session.connection)
+            response = Request::Retry.(session.connection) do
+              ::HTTP::Commands::Get.(uri, headers, connection: session.connection)
+            end
 
             logger.opt_debug "Retrieved stream metadata (URI: #{uri.to_s.inspect}, Content Length: #{response['Content-Length']})"
 

@@ -5,9 +5,14 @@ context "Stream Slice" do
   slice = Serialize::Read.(json_text, EventStore::Client::HTTP::Slice, :json)
 
   context "Entries" do
-    test "Event URI" do
-      assert slice.entries[0].event_uri.match(%r{/streams/someStream/1$})
-      assert slice.entries[1].event_uri.match(%r{/streams/someStream/0$})
+    test "Data" do
+      assert slice.entries[0].data.key?(:some_attribute)
+      assert slice.entries[1].data.key?(:some_attribute)
+    end
+
+    test "Metadata" do
+      assert slice.entries[0].metadata.key?(:some_meta_attribute)
+      assert slice.entries[1].metadata.key?(:some_meta_attribute)
     end
 
     test "Position" do
@@ -17,6 +22,6 @@ context "Stream Slice" do
   end
 
   test "Next URI" do
-    assert slice.links.next_uri.match(%r{/streams/someStream/2/forward/2$})
+    assert slice.links.previous_uri.match(%r{/streams/someStream/2/forward/2$})
   end
 end

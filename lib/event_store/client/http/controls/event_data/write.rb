@@ -4,15 +4,21 @@ module EventStore
       module Controls
         module EventData
           module Write
-            def self.data(id=nil)
+            def self.data(id=nil, metadata: nil)
               id ||= ::Controls::ID.get sample: false
+              metadata = true if metadata.nil?
 
-              {
+              data = {
                 :event_id => id,
                 :event_type => 'SomeType',
                 :data => { :some_attribute => 'some value' },
-                :metadata => EventData::Metadata.data
               }
+
+              if metadata
+                data[:metadata] = EventData::Metadata.data
+              end
+
+              data
             end
 
             module JSON
@@ -23,12 +29,13 @@ module EventStore
               end
 
               def self.text
-                data.to_json
+                ::JSON.generate data
               end
             end
 
-            def self.example(id=nil, i: nil, type: nil)
+            def self.example(id=nil, i: nil, metadata: nil, type: nil)
               id ||= ::Controls::ID.get i, sample: false
+              metadata = true if metadata.nil?
               type ||= 'SomeType'
 
               event_data = EventStore::Client::HTTP::EventData::Write.build
@@ -41,7 +48,9 @@ module EventStore
                 :some_attribute => 'some value'
               }
 
-              event_data.metadata = EventData::Metadata.data
+              if metadata
+                event_data.metadata = EventData::Metadata.data
+              end
 
               event_data
             end

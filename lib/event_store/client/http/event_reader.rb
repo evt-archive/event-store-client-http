@@ -4,8 +4,6 @@ module EventStore
       class EventReader
         attr_reader :stream_name
 
-        dependency :request, EventStore::Client::HTTP::Request::Get
-        dependency :session, Session
         dependency :stream_reader, StreamReader
         dependency :logger, Telemetry::Logger
 
@@ -23,17 +21,10 @@ module EventStore
           direction ||= StreamReader::Defaults.direction
           starting_position ||= StreamReader::Defaults.starting_position(direction)
 
-          session ||= EventStore::Client::HTTP::Session.build
-
-          logger.opt_trace "Building event reader (Stream Name: #{stream_name}, Starting Position: #{starting_position}, Slice Size: #{slice_size}, Direction: #{direction})"
-
           new(stream_name, direction).tap do |instance|
-            Request::Get.configure instance, session: session
             stream_reader.configure instance, stream_name, starting_position: starting_position, slice_size: slice_size, direction: direction, session: session
-            instance.session = session
 
             Telemetry::Logger.configure instance
-            logger.opt_debug "Built event reader (Stream Name: #{stream_name}, Starting Position: #{starting_position}, Slice Size: #{slice_size}, Direction: #{direction})"
           end
         end
 
@@ -60,39 +51,10 @@ module EventStore
 
         def read_slice(slice, &action)
           logger.opt_trace "Reading slice (Number of Entries: #{slice.length})"
-          slice.each(direction) do |event_json_data|
-            entry = get_entry(event_json_data)
-            action.call entry
+          slice.each(direction) do |event_data|
+            action.call event_data
           end
           logger.opt_debug "Read slice (Number of Entries: #{slice.length})"
-        end
-
-        def get_entry(slice_entry)
-          json_text = get_json_text(slice_entry)
-
-          event_data = parse_entry(json_text)
-
-          event_data.position = slice_entry.position
-
-          event_data
-        end
-
-        def get_json_text(slice_entry)
-          uri = slice_entry.event_uri
-
-          logger.opt_trace "Retrieving event JSON (Stream Name: #{stream_name}, URI: #{uri})"
-          body_text, _ = request.(uri)
-          logger.opt_debug "Retrieved event JSON (Stream Name: #{stream_name}, URI: #{uri})"
-
-          body_text
-        end
-
-        def parse_entry(json_text)
-          Serialize::Read.(json_text, EventData::Read, :json)
-        end
-
-        def self.logger
-          Telemetry::Logger.get self
         end
       end
     end
