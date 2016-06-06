@@ -3,20 +3,23 @@ module EventStore
     module HTTP
       module StreamMetadata
         class Update
-          attr_accessor :uri
+          attr_reader :stream_name
 
           dependency :logger, Telemetry::Logger
           dependency :read_metadata, Read
           dependency :event_writer, EventWriter
+          dependency :session, Session
+
+          def initialize(stream_name)
+            @stream_name = stream_name
+          end
 
           def self.build(stream_name, session: nil)
-            instance = new
+            instance = new stream_name
 
-            session ||= Session.build
+            session = Session.configure instance, session: session
 
-            read = Read.configure instance, stream_name, session: session, attr_name: :read_metadata
-            instance.uri = read.uri
-
+            Read.configure instance, stream_name, session: session, attr_name: :read_metadata
             Telemetry::Logger.configure instance
             EventWriter.configure instance, session: session, attr_name: :event_writer
 
@@ -76,6 +79,10 @@ module EventStore
 
           def media_type
             'application/vnd.eventstore.atom+json'
+          end
+
+          def uri
+            @uri ||= URI::Get.(stream_name, session: session)
           end
         end
       end
