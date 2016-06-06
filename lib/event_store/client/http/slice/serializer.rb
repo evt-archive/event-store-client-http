@@ -57,26 +57,34 @@ module EventStore
           end
 
           module JSON
+            class ObjectClass < Hash
+              def []=(raw_key, value)
+                key = key_cache[raw_key]
+
+                super key, value
+              end
+
+              def key_cache
+                @@key_cache ||= Hash.new do |cache, raw_key|
+                  cache[raw_key] = Casing::Underscore.(raw_key).to_sym
+                end
+              end
+            end
+
             def self.deserialize(text)
-              formatted_data = ::JSON.parse text, symbolize_names: true
-              raw_data = Casing::Underscore.(formatted_data)
+              raw_data = ::JSON.parse text, object_class: ObjectClass
 
               raw_data[:entries].each do |entry|
                 event_data_text = entry[:data]
-                entry[:data] = unpack_serialized_value event_data_text
+                entry[:data] = ::JSON.parse event_data_text, object_class: ObjectClass
 
                 metadata_text = entry[:meta_data]
                 if metadata_text
-                  entry[:meta_data] = unpack_serialized_value metadata_text
+                  entry[:meta_data] = ::JSON.parse metadata_text, object_class: ObjectClass
                 end
               end
 
               raw_data
-            end
-
-            def self.unpack_serialized_value(text)
-              data = ::JSON.parse text, symbolize_names: true
-              Casing::Underscore.(data)
             end
           end
         end

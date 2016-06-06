@@ -22,6 +22,6 @@ context "Stream Slice" do
   end
 
   test "Next URI" do
-    assert slice.links.next_uri.match(%r{/streams/someStream/2/forward/2$})
+    assert slice.links.previous_uri.match(%r{/streams/someStream/2/forward/2$})
   end
 end

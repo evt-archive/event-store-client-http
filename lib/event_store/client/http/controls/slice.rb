@@ -3,19 +3,19 @@ module EventStore
     module HTTP
       module Controls
         module Slice
-          def self.data(stream_name=nil)
+          def self.data(stream_name=nil, count: nil)
+            count ||= 2
             stream_name ||= 'someStream'
 
-            entries = [
-              EventData.data(1, position: 1),
-              EventData.data(0, position: 0)
-            ]
+            entries = count.times.reverse_each.map do |number|
+              EventData.data(number, position: number)
+            end
 
             {
               :links => [
                 {
-                  :uri => "http://localhost:2113/streams/#{stream_name}/2/forward/2",
-                  :relation => "previous"
+                  :uri => "http://localhost:2113/streams/#{stream_name}/#{count}/forward/#{count}",
+                  :relation => "next"
                 }
               ],
               :entries => entries
@@ -23,12 +23,12 @@ module EventStore
           end
 
           module JSON
-            def self.text
-              raw_data = Slice.data
+            def self.text(count: nil)
+              raw_data = Slice.data count: count
 
               formatted_data = Casing::Camel.(raw_data, symbol_to_string: true)
 
-              ::JSON.generate formatted_data
+              ::JSON.pretty_generate formatted_data
             end
           end
         end

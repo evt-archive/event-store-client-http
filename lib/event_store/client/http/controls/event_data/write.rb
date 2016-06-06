@@ -29,7 +29,7 @@ module EventStore
               end
 
               def self.text
-                data.to_json
+                ::JSON.generate data
               end
             end
 
