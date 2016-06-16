@@ -79,7 +79,7 @@ module EventStore
                 entry[:data] = ::JSON.parse event_data_text, object_class: ObjectClass
 
                 metadata_text = entry[:meta_data]
-                if metadata_text
+                if metadata_text && !metadata_text.empty?
                   entry[:meta_data] = ::JSON.parse metadata_text, object_class: ObjectClass
                 end
               end
