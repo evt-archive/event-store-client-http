@@ -11,6 +11,10 @@ module EventStore
           end
 
           module Serializer
+            def self.json
+              JSON
+            end
+
             def self.raw_data(instance)
               {
                 :event_id => instance.id,
@@ -18,6 +22,13 @@ module EventStore
                 :data => instance.data,
                 :metadata => instance.metadata
               }
+            end
+
+            module JSON
+              def self.serialize(data)
+                formatted_data = Casing::Camel.(data)
+                ::JSON.pretty_generate formatted_data
+              end
             end
           end
         end
