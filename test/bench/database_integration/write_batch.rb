@@ -6,8 +6,8 @@ context "Write Batch of Events" do
 
   writer = EventStore::Client::HTTP::EventWriter.build
 
-  id_1 = Controls::ID.get 1
-  id_2 = Controls::ID.get 2
+  id_1 = EventStore::Client::HTTP::Controls::ID.example 1
+  id_2 = EventStore::Client::HTTP::Controls::ID.example 2
 
   event_data_1 = EventStore::Client::HTTP::Controls::EventData::Write.example(id_1)
   event_data_2 = EventStore::Client::HTTP::Controls::EventData::Write.example(id_2)

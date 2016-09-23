@@ -5,7 +5,7 @@ module EventStore
         module EventData
           module Batch
             def self.example(id=nil, metadata: nil)
-              id ||= ::Controls::ID.get
+              id ||= ID.example
 
               batch = EventStore::Client::HTTP::EventData::Batch.build
               batch.add EventData::Write.example(id, metadata: metadata)

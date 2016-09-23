@@ -4,7 +4,7 @@ context "Deserialized Entry" do
   json_text = EventStore::Client::HTTP::Controls::EventData::Read::JSON.text
   event_data = Serialize::Read.(json_text, EventStore::Client::HTTP::EventData::Read, :json)
 
-  reference_time = Controls::Time.reference
+  reference_time = EventStore::Client::HTTP::Controls::Time.example
 
   test "Type" do
     assert(event_data.type == 'SomeEvent')

@@ -11,7 +11,7 @@ module EventStore
 
               metadata = Controls::EventData::Metadata::JSON.text
               stream_name = StreamName.reference
-              time = ::Controls::Time.reference
+              time = Time.example
               type = 'SomeEvent'
 
               payload = ::JSON.generate(

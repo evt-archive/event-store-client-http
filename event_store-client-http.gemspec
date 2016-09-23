@@ -14,6 +14,7 @@ Gem::Specification.new do |s|
   s.files = Dir.glob('{lib}/**/*')
   s.platform = Gem::Platform::RUBY
 
+  s.add_runtime_dependency 'clock'
   s.add_runtime_dependency 'casing'
   s.add_runtime_dependency 'connection-client'
   s.add_runtime_dependency 'event_store-client'

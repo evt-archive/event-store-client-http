@@ -5,7 +5,7 @@ module EventStore
         module EventData
           module Read
             def self.data(number=nil, time: nil, stream_name: nil, metadata: nil, type: nil, omit_metadata: nil, position: nil)
-              reference_time = ::Controls::Time.reference
+              reference_time = Time.example
 
               number ||= 0
               time ||= reference_time

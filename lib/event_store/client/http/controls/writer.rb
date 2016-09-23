@@ -19,7 +19,7 @@ module EventStore
             iterations.times do |iteration|
               iteration += 1
 
-              id = ::Controls::ID.get(iteration)
+              id = ID.example(iteration)
 
               event_data = Controls::EventData::Batch.example(id, metadata: metadata)
 

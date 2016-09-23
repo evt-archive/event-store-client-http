@@ -5,7 +5,7 @@ module EventStore
         module EventData
           module Write
             def self.data(id=nil, metadata: nil)
-              id ||= ::Controls::ID.get sample: false
+              id ||= ID.example sample: false
               metadata = true if metadata.nil?
 
               data = {
@@ -34,7 +34,7 @@ module EventStore
             end
 
             def self.example(id=nil, i: nil, metadata: nil, type: nil)
-              id ||= ::Controls::ID.get i, sample: false
+              id ||= ID.example i, sample: false
               metadata = true if metadata.nil?
               type ||= 'SomeType'
 

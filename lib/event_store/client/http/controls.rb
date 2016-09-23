@@ -1,7 +1,11 @@
+require 'clock/controls'
+require 'identifier/uuid/controls'
+
 require 'connection/client/controls'
 require 'event_store/client/controls'
 
 require 'event_store/client/http/controls/connection_scheduler'
+require 'event_store/client/http/controls/id'
 require 'event_store/client/http/controls/stream_name'
 require 'event_store/client/http/controls/slice'
 require 'event_store/client/http/controls/slice/event_data'
@@ -11,4 +15,5 @@ require 'event_store/client/http/controls/event_data/write'
 require 'event_store/client/http/controls/event_data/read'
 require 'event_store/client/http/controls/event_data/batch'
 require 'event_store/client/http/controls/stream_metadata'
+require 'event_store/client/http/controls/time'
 require 'event_store/client/http/controls/writer'
