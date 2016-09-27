@@ -3,6 +3,7 @@ require 'uri'
 
 require 'casing'
 require 'clock'
+require 'configure'; Configure.activate
 require 'dependency' ; Dependency.activate
 require 'event_store/client'
 require 'http/commands'

@@ -16,6 +16,7 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency 'clock'
   s.add_runtime_dependency 'casing'
+  s.add_runtime_dependency 'configure'
   s.add_runtime_dependency 'connection-client'
   s.add_runtime_dependency 'event_store-client'
   s.add_runtime_dependency 'http-commands'

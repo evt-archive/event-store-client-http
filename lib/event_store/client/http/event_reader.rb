@@ -2,6 +2,8 @@ module EventStore
   module Client
     module HTTP
       class EventReader
+        configure :reader
+
         attr_reader :stream_name
 
         dependency :stream_reader, StreamReader
@@ -26,12 +28,6 @@ module EventStore
 
             Telemetry::Logger.configure instance
           end
-        end
-
-        def self.configure(receiver, stream_name, starting_position: nil, slice_size: nil, session: nil)
-          instance = build stream_name, starting_position: starting_position, slice_size: slice_size, session: session
-          receiver.reader = instance
-          instance
         end
 
         def each(&action)
