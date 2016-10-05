@@ -11,7 +11,7 @@ context "Reading back events previously written to the database" do
     end
 
     test "Event type" do
-      assert event_data.type == 'SomeType'
+      assert event_data.type == EventStore::Client::HTTP::Controls::EventData::Type.example
     end
 
     test "Event data payload" do

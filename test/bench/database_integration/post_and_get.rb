@@ -27,7 +27,9 @@ context "Posting event data" do
     data = content['data']
     metadata = content['metadata']
 
-    assert(data == {"someAttribute" => "some value"})
+    control_data = EventStore::Client::HTTP::Controls::EventData::Data::JSON.data
+
+    assert(data == control_data)
     assert(metadata == {"someMetaAttribute" => "some meta value"})
   end
 end

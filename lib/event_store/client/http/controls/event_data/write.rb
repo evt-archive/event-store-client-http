@@ -4,55 +4,35 @@ module EventStore
       module Controls
         module EventData
           module Write
-            def self.data(id=nil, metadata: nil)
-              id ||= ID.example sample: false
+            def self.example(id=nil, i: nil, type: nil, data: nil, metadata: nil)
+              id ||= ID.example i, sample: false
+              type ||= Type.example
+              data ||= Data.example
               metadata = true if metadata.nil?
 
-              data = {
-                :event_id => id,
-                :event_type => 'SomeType',
-                :data => { :some_attribute => 'some value' },
-              }
+              event_data = EventStore::Client::HTTP::EventData::Write.build
+              event_data.id = id
+              event_data.type = type
+              event_data.data = data
 
-              if metadata
-                data[:metadata] = EventData::Metadata.data
-              end
+              metadata = Metadata.data if metadata == true
+              event_data.metadata = metadata if metadata
 
-              data
+              event_data
+            end
+
+            def self.data(id=nil, **arguments)
+              event_data = self.example id, **arguments
+
+              Serialize::Write.raw_data event_data
             end
 
             module JSON
-              def self.data(id=nil)
-                data = Write.data id
-
-                Casing::Camel.(data, symbol_to_string: true)
-              end
-
               def self.text
-                ::JSON.pretty_generate data
+                event_data = Write.example
+
+                Serialize::Write.(event_data, :json)
               end
-            end
-
-            def self.example(id=nil, i: nil, metadata: nil, type: nil)
-              id ||= ID.example i, sample: false
-              metadata = true if metadata.nil?
-              type ||= 'SomeType'
-
-              event_data = EventStore::Client::HTTP::EventData::Write.build
-
-              event_data.id = id
-
-              event_data.type = type
-
-              event_data.data = {
-                :some_attribute => 'some value'
-              }
-
-              if metadata
-                event_data.metadata = EventData::Metadata.data
-              end
-
-              event_data
             end
           end
         end

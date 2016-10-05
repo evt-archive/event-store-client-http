@@ -4,10 +4,14 @@ module EventStore
       module Controls
         module EventData
           module Metadata
-            def self.data
+            def self.example
               {
                 some_meta_attribute: 'some meta value'
               }
+            end
+
+            def self.data
+              example
             end
 
             module JSON

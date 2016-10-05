@@ -22,16 +22,16 @@ context "Write Event" do
       assert(read_data.stream_name == stream_name)
     end
 
-    test "Stream Name" do
+    test "Number" do
       assert(read_data.number == 0)
     end
 
     test "Data" do
-      assert(read_data.data == {:some_attribute => 'some value'})
+      assert read_data.data == EventStore::Client::HTTP::Controls::EventData::Data.example
     end
 
     test "Metadata" do
-      assert(read_data.metadata == {:some_meta_attribute => 'some meta value'})
+      assert read_data.metadata == EventStore::Client::HTTP::Controls::EventData::Metadata.example
     end
   end
 end
