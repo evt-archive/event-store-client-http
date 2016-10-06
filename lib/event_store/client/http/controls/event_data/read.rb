@@ -4,15 +4,20 @@ module EventStore
       module Controls
         module EventData
           module Read
-            def self.data(number=nil, time: nil, stream_name: nil, metadata: nil, type: nil, omit_metadata: nil, position: nil)
+            def self.example(number=nil, **arguments)
+              data = self.data *arguments
+
+              Serialize::Read.instance data, Client::HTTP::EventData::Read
+            end
+
+            def self.data(number=nil, type: nil, data: nil, metadata: nil, stream_name: nil, position: nil)
               reference_time = Time.example
 
               number ||= 0
-              time ||= reference_time
+              type ||= Type.example
+              data ||= Data.example
+              metadata = true if metadata.nil?
               stream_name ||= StreamName.reference
-              type ||= 'SomeEvent'
-              metadata ||= Metadata.data
-              omit_metadata ||= false
               position ||= number
 
               data = {
@@ -21,11 +26,7 @@ module EventStore
                   :event_type => type,
                   :event_number => number,
                   :event_stream_id => stream_name,
-                  :data => {
-                    :some_attribute => 'some value',
-                    :some_time => time
-                  },
-                  :metadata => metadata
+                  :data => data
                 },
                 :position_event_number => position,
                 :links => [
@@ -36,25 +37,19 @@ module EventStore
                 ]
               }
 
-              if omit_metadata
-                data[:content].delete :metadata
-              end
+              metadata = Metadata.data if metadata == true
+              data[:content][:metadata] = metadata if metadata
 
               data
             end
 
-            def self.example(number=nil, position: nil, **arguments)
-              data = self.data *arguments
-
-              instance = Serialize::Read.instance data, Client::HTTP::EventData::Read
-              instance.position = position if position
-              instance
-            end
-
             module JSON
-              def self.text(number=nil, time: nil, stream_name: nil, metadata: nil, omit_metadata: nil)
-                data = Read.data number, time: time, stream_name: stream_name, metadata: stream_name, omit_metadata: omit_metadata
-                ::JSON.generate data
+              def self.text(number=nil, **arguments)
+                raw_data = Read.data number, **arguments
+
+                formatted_data = Casing::Camel.(raw_data, symbol_to_string: true)
+
+                ::JSON.pretty_generate formatted_data
               end
             end
           end
