@@ -31,7 +31,7 @@ context "Write Event" do
     end
 
     test "Metadata" do
-      assert read_data.metadata == EventStore::Client::HTTP::Controls::EventData::Metadata.example
+      assert read_data.metadata == EventStore::Client::HTTP::Controls::EventData::Metadata.data
     end
   end
 end

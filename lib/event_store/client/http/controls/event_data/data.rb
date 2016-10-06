@@ -3,12 +3,6 @@ module EventStore
     module HTTP
       module Controls
         module EventData
-          module Type
-            def self.example
-              'SomeEvent'
-            end
-          end
-
           module Data
             def self.example(time: nil)
               time ||= Time.example
