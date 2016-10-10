@@ -4,7 +4,7 @@ module EventStore
       module Controls
         module EventData
           module Read
-            def self.example(number=nil, **arguments)
+            def self.example(**arguments)
               data = self.data *arguments
 
               Serialize::Read.instance data, Client::HTTP::EventData::Read
