@@ -8,6 +8,8 @@ module EventStore
           attribute :stream_name
           attribute :created_time
           attribute :links
+          
+          alias :sequence :number
 
           module Serializer
             def self.json

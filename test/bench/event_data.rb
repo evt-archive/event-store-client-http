@@ -18,4 +18,10 @@ context "Event Data" do
 
     assert error
   end
+
+  test "Sequence is an alias for number" do
+    event_data = EventStore::Client::HTTP::Controls::EventData::Read.example
+
+    assert(event_data.sequence == event_data.number)
+  end
 end
