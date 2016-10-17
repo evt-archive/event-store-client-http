@@ -1,29 +1,37 @@
 module EventStore
   module Client
     module HTTP
-      class EventData
+      module EventData
         class IdentityError < RuntimeError; end
 
-        include Schema::DataStructure
+        def self.included(cls)
+          cls.class_exec do
+            include Schema::DataStructure
 
-        dependency :uuid, Identifier::UUID::Random
-        dependency :logger, Telemetry::Logger
+            dependency :uuid, Identifier::UUID::Random
+            dependency :logger, Telemetry::Logger
 
-        attribute :type
-        attribute :data
-        attribute :metadata
+            attribute :type
+            attribute :data
+            attribute :metadata
 
-        def configure_dependencies
-          Identifier::UUID::Random.configure self
-          Telemetry::Logger.configure self
+            prepend Configure
+
+            virtual :configure
+          end
         end
 
         def digest
           "Type: #{type}"
         end
 
-        def self.logger
-          Telemetry::Logger.get self
+        module Configure
+          def configure
+            Identifier::UUID::Random.configure self
+            Telemetry::Logger.configure self
+
+            super
+          end
         end
       end
     end
