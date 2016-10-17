@@ -1,8 +1,10 @@
 module EventStore
   module Client
     module HTTP
-      class EventData
-        class Write < EventData
+      module EventData
+        class Write
+          include EventData
+
           attribute :id
 
           def assign_id

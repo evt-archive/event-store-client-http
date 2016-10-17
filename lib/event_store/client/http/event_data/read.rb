@@ -1,8 +1,10 @@
 module EventStore
   module Client
     module HTTP
-      class EventData
-        class Read < EventData
+      module EventData
+        class Read
+          include EventData
+
           attribute :number
           attribute :position
           attribute :stream_name

@@ -1,7 +1,7 @@
 module EventStore
   module Client
     module HTTP
-      class EventData
+      module EventData
         class Batch
           dependency :logger, Telemetry::Logger
 
