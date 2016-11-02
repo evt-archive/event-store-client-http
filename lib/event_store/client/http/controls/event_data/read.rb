@@ -20,6 +20,8 @@ module EventStore
               stream_name ||= StreamName.reference
               position ||= number
 
+              edit_link = Links::Edit.example stream_name: stream_name, number: number
+
               data = {
                 :updated => reference_time,
                 :content => {
@@ -31,7 +33,7 @@ module EventStore
                 :position_event_number => position,
                 :links => [
                   {
-                    :uri => "http://localhost:2113/streams/#{stream_name}/#{number}",
+                    :uri => edit_link,
                     :relation => 'edit'
                   }
                 ]
@@ -50,6 +52,17 @@ module EventStore
                 formatted_data = Casing::Camel.(raw_data, symbol_to_string: true)
 
                 ::JSON.pretty_generate formatted_data
+              end
+            end
+
+            module Links
+              module Edit
+                def self.example(stream_name: nil, number: nil)
+                  number ||= 0
+                  stream_name ||= StreamName.reference
+
+                  "http://localhost:2113/streams/#{stream_name}/#{number}"
+                end
               end
             end
           end
