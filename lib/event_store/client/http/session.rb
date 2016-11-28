@@ -1,4 +1,3 @@
-# Closed for further elaboration [Nathan, Scott, Wed Jan 27, 2016]
 module EventStore
   module Client
     module HTTP
