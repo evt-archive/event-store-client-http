@@ -1,4 +1,3 @@
-# Closed for further elaboration [Nathan, Scott, Wed Jan 27, 2016]
 module EventStore
   module Client
     module HTTP
@@ -9,7 +8,12 @@ module EventStore
         dependency :logger, Telemetry::Logger
         dependency :connection, Connection::Client
 
-        def self.build(settings=nil, namespace=nil)
+        def self.build(settings=nil, _namespace=nil, namespace: nil)
+          unless _namespace.nil?
+            logger.obsolete "Positional parameter for namespace is obsolete; it has been replaced by a keyword argument"
+            namespace ||= _namespace
+          end
+
           logger.opt_trace "Building HTTP session"
 
           new.tap do |instance|
