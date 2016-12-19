@@ -2,6 +2,20 @@ module EventStore
   module Client
     module HTTP
       class Session
+        initializer :session
+
+        def method_missing(method_name, *arguments, &block)
+          if respond_to_missing? method_name
+            session.__send__ method_name, *arguments, &block
+          else
+            super
+          end
+        end
+
+        def respond_to_missing?(method_name)
+          session.respond_to? method_name
+        end
+
         setting :host
         setting :port
 
@@ -16,7 +30,9 @@ module EventStore
 
           logger.opt_trace "Building HTTP session"
 
-          new.tap do |instance|
+          session = EventSource::EventStore::HTTP::Session.build settings, namespace: namespace
+
+          new(session).tap do |instance|
             Telemetry::Logger.configure instance
 
             settings ||= Settings.instance
