@@ -13,6 +13,8 @@ require 'serialize'
 require 'settings' ; Settings.activate
 require 'telemetry/logger'
 
+require 'event_source/event_store/http'
+
 require 'event_store/client/http/settings'
 
 require 'event_store/client/http/slice/links'

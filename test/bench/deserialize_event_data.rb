@@ -7,7 +7,7 @@ context "Deserialized Entry" do
   reference_time = EventStore::Client::HTTP::Controls::Time.example
 
   test "Type" do
-    assert(event_data.type == 'SomeEvent')
+    assert(event_data.type == 'SomeType')
   end
 
   test "Number" do
@@ -23,16 +23,11 @@ context "Deserialized Entry" do
   end
 
   test "Data" do
-    control_data = {
-      :some_attribute => 'some value',
-      :some_time => reference_time
-    }
-
-    assert(event_data.data == control_data)
+    assert(event_data.data.key?(:attribute))
   end
 
   test "Metadata" do
-    assert(event_data.metadata == { :some_meta_attribute => 'some meta value' })
+    assert(event_data.metadata.key?(:meta_attribute))
   end
 
   context "Links" do

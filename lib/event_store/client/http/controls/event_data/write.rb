@@ -6,8 +6,8 @@ module EventStore
           module Write
             def self.example(id=nil, i: nil, type: nil, data: nil, metadata: nil)
               id ||= ID.example i, sample: false
-              type ||= Type.example
-              data ||= Data.example
+              type ||= EventData.type
+              data ||= EventData.data
               metadata = true if metadata.nil?
 
               event_data = EventStore::Client::HTTP::EventData::Write.build
@@ -28,8 +28,8 @@ module EventStore
             end
 
             module JSON
-              def self.text
-                event_data = Write.example
+              def self.text(data: nil, metadata: nil)
+                event_data = Write.example data: data, metadata: metadata
 
                 Serialize::Write.(event_data, :json)
               end

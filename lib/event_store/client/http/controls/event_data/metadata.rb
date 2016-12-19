@@ -5,19 +5,15 @@ module EventStore
         module EventData
           module Metadata
             def self.data
-              {
-                some_meta_attribute: 'some meta value'
-              }
+              EventSource::EventStore::HTTP::Controls::EventData::Metadata.data
             end
 
             module JSON
-              def self.data
-                {
-                  'someMetaAttribute' => 'some meta value'
-                }
-              end
-
               def self.text
+                data = Metadata.data
+
+                { 'metaAttribute' => data[:meta_attribute] }
+
                 ::JSON.generate data
               end
             end

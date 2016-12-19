@@ -21,15 +21,16 @@ context "Posting event data" do
   end
 
   test "Written data is retrieved" do
+    control_data = JSON.parse(data)[0]['data']
+    control_metadata = JSON.parse(data)[0]['metadata']
+
     body = JSON.parse(body_text)
 
     content = body['content']
     data = content['data']
     metadata = content['metadata']
 
-    control_data = EventStore::Client::HTTP::Controls::EventData::Data::JSON.data
-
     assert(data == control_data)
-    assert(metadata == {"someMetaAttribute" => "some meta value"})
+    assert(metadata == control_metadata)
   end
 end
