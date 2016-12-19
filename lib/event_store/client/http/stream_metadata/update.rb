@@ -8,7 +8,7 @@ module EventStore
           dependency :logger, Telemetry::Logger
           dependency :read_metadata, Read
           dependency :event_writer, EventWriter
-          dependency :session, Session
+          dependency :session, EventSource::EventStore::HTTP::Session
 
           def initialize(stream_name)
             @stream_name = stream_name
@@ -64,11 +64,11 @@ module EventStore
             )
             event_data.assign_id
 
-            response = event_writer.write event_data, uri
+            status_code = event_writer.write event_data, uri
 
-            logger.opt_debug "Wrote stream metadata (URI: #{uri.to_s.inspect}, Status Code: #{response.status_code}, Event ID: #{event_data.id.inspect})"
+            logger.opt_debug "Wrote stream metadata (URI: #{uri.to_s.inspect}, StatusCode: #{status_code}, EventID: #{event_data.id.inspect})"
 
-            return event_data, response
+            return event_data, status_code
           end
 
           def headers

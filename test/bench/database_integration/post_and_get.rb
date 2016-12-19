@@ -7,13 +7,13 @@ context "Posting event data" do
   data = EventStore::Client::HTTP::Controls::EventData::Batch::JSON.text
 
   post = EventStore::Client::HTTP::Request::Post.build
-  post_response = post.(data, path)
+  post_status_code = post.(data, path)
 
   get = EventStore::Client::HTTP::Request::Get.build
   body_text, get_response = get.("#{path}/0")
 
   test "Post responds with successful status" do
-    assert(post_response.status_code == 201)
+    assert(post_status_code == 201)
   end
 
   test "Get responds with successful status" do

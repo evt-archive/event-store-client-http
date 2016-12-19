@@ -7,7 +7,7 @@ context "Updating stream metadata" do
 
   update_metadata = EventStore::Client::HTTP::StreamMetadata::Update.build stream_name
 
-  event_data, response = update_metadata.() do |metadata|
+  event_data, status_code = update_metadata.() do |metadata|
     metadata.update updated_metadata
   end
 
@@ -30,6 +30,6 @@ context "Updating stream metadata" do
   end
 
   test "EventStore accepts the submitted metadata" do
-    assert response.status_code == 201
+    assert status_code == 201
   end
 end
