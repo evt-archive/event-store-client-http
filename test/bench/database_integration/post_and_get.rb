@@ -10,14 +10,14 @@ context "Posting event data" do
   post_status_code = post.(data, path)
 
   get = EventStore::Client::HTTP::Request::Get.build
-  body_text, get_response = get.("#{path}/0")
+  body_text, get_status_code = get.("#{path}/0")
 
   test "Post responds with successful status" do
     assert(post_status_code == 201)
   end
 
   test "Get responds with successful status" do
-    assert(get_response.status_code == 200)
+    assert(get_status_code == 200)
   end
 
   test "Written data is retrieved" do
