@@ -19,6 +19,12 @@ module EventStore
 
           EventSource::EventStore::HTTP::Session.configure receiver, settings, session: session, attr_name: attr_name
         end
+
+        module Substitute
+          def self.build
+            SubstAttr::Substitute.build EventSource::EventStore::HTTP::Session
+          end
+        end
       end
     end
   end
