@@ -10,23 +10,15 @@ module EventStore
 
             extend Build
 
-            dependency :logger, Telemetry::Logger
             dependency :session, EventSource::EventStore::HTTP::Session
           end
         end
 
-        Virtual::Method.define self, :configure_dependencies
-
-        def configure_session(session=nil)
-          EventSource::EventStore::HTTP::Session.configure self
-        end
-
         module Build
           def build(session: nil)
-            new.tap do |instance|
-              instance.configure_dependencies
-              instance.configure_session(session)
-            end
+            instance = new
+            EventSource::EventStore::HTTP::Session.configure instance, session: session
+            instance
           end
         end
       end

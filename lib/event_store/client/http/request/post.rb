@@ -3,9 +3,6 @@ module EventStore
     module HTTP
       module Request
         class Post
-          class ExpectedVersionError < RuntimeError; end
-          class Error < RuntimeError; end
-
           include Request
 
           def call(data, path, expected_version: nil)
@@ -64,6 +61,9 @@ module EventStore
           def set_expected_version_header(request, expected_version)
             request['ES-ExpectedVersion'] = expected_version.to_s
           end
+
+          ExpectedVersionError = Class.new RuntimeError
+          Error = Class.new RuntimeError
         end
       end
     end
