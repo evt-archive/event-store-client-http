@@ -4,6 +4,7 @@ module EventStore
       module Session
         def self.build(settings=nil, _namespace=nil, namespace: nil)
           unless _namespace.nil?
+            logger = Telemetry::Logger.get(self)
             logger.obsolete "Positional parameter for namespace is obsolete; it has been replaced by a keyword argument"
             namespace ||= _namespace
           end
