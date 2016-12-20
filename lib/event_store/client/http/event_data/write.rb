@@ -2,10 +2,8 @@ module EventStore
   module Client
     module HTTP
       module EventData
-        class Write
-          include EventData
-
-          attribute :id, String
+        class Write < EventSource::EventData::Write
+          attribute :id
 
           dependency :uuid, Identifier::UUID::Random
 

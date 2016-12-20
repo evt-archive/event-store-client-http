@@ -2,14 +2,12 @@ module EventStore
   module Client
     module HTTP
       module EventData
-        class Read
-          include EventData
-
-          attribute :number, Integer
-          attribute :position, Integer
-          attribute :stream_name, String
-          attribute :created_time, String
-          attribute :links, Links
+        class Read < EventSource::EventData::Read
+          attribute :number
+          attribute :position
+          attribute :stream_name
+          attribute :created_time
+          attribute :links
           
           alias :sequence :number
         end
