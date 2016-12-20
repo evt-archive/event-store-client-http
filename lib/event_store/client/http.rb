@@ -6,7 +6,6 @@ require 'clock'
 require 'configure'; Configure.activate
 require 'dependency' ; Dependency.activate
 require 'event_store/client'
-require 'http/commands'
 require 'identifier/uuid'
 require 'schema'
 require 'serialize'
