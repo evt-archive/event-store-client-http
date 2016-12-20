@@ -18,8 +18,7 @@ module EventStore
         Virtual::Method.define self, :configure_dependencies
 
         def configure_session(session=nil)
-          #EventSource::EventStore::HTTP::Session.configure self
-          Session.configure self, session: session
+          EventSource::EventStore::HTTP::Session.configure self
         end
 
         module Build
