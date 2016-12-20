@@ -22,7 +22,10 @@ require 'event_store/client/http/slice/serializer'
 require 'event_store/client/http/slice'
 
 require 'event_store/client/http/event_data'
+require 'event_store/client/http/event_data/read/links'
+require 'event_store/client/http/event_data/read/serializer'
 require 'event_store/client/http/event_data/read'
+require 'event_store/client/http/event_data/write/serializer'
 require 'event_store/client/http/event_data/write'
 require 'event_store/client/http/event_data/batch'
 
