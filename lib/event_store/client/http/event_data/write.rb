@@ -7,6 +7,12 @@ module EventStore
 
           attribute :id
 
+          dependency :uuid, Identifier::UUID::Random
+
+          def configure
+            Identifier::UUID::Random.configure self
+          end
+
           def assign_id
             raise IdentityError, "ID is already assigned (ID: #{id})" unless id.nil?
             self.id = uuid.get
