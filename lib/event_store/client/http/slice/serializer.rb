@@ -22,7 +22,7 @@ module EventStore
           end
 
           def self.event_data(data)
-            links = EventData::Read::Serializer::Links.new
+            links = EventData::Read::Links.new
 
             data[:links].to_a.each do |link_data|
               links.edit_uri = link_data[:uri] if link_data[:relation] == 'edit'

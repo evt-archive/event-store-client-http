@@ -17,11 +17,9 @@ context "Expected Version" do
     test "Sets the ES-ExpectedVersion header" do
       post = EventStore::Client::HTTP::Request::Post.new
 
-      expected_version = 1
+      headers = post.headers(1)
 
-      headers = post.headers(expected_version)
-
-      assert headers[expected_version_header] == expected_version
+      assert headers[expected_version_header] == '1'
     end
   end
 
@@ -34,7 +32,7 @@ context "Expected Version" do
 
       headers = post.headers(expected_version)
 
-      assert headers[expected_version_header] == expected_header_value
+      assert headers[expected_version_header] == expected_header_value.to_s
     end
   end
 end

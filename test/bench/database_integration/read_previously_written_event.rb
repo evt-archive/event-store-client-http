@@ -2,7 +2,10 @@ require_relative '../bench_init'
 
 context "Reading back events previously written to the database" do
   context do
-    stream_name = EventStore::Client::HTTP::Controls::Writer.write
+    data = EventStore::Client::HTTP::Controls::EventData.data
+    metadata = EventStore::Client::HTTP::Controls::EventData::Metadata.data
+
+    stream_name = EventStore::Client::HTTP::Controls::Writer.write data: data, metadata: metadata
 
     event_data = nil
 
@@ -11,15 +14,15 @@ context "Reading back events previously written to the database" do
     end
 
     test "Event type" do
-      assert event_data.type == EventStore::Client::HTTP::Controls::EventData::Type.example
+      assert event_data.type == EventStore::Client::HTTP::Controls::EventData.type
     end
 
     test "Event data payload" do
-      assert event_data.data[:some_attribute] == 'some value'
+      assert event_data.data == data
     end
 
     test "Event metadata" do
-      assert event_data.metadata[:some_meta_attribute] == 'some meta value'
+      assert event_data.metadata == metadata
     end
 
     test "Event number within stream" do

@@ -7,37 +7,31 @@ module EventStore
 
           attr_accessor :long_poll
 
-          def call(uri)
-            logger.opt_trace "Issuing GET (URI: #{uri})"
+          def call(path)
+            log_attributes = "Path: #{path}"
+            logger.opt_trace "Issuing GET (Path: #{path})"
 
-            uri = session.build_uri(uri)
+            headers = self.headers
 
-            response = Retry.(session.connection) do
-              ::HTTP::Commands::Get.(uri, headers, connection: session.connection)
-            end
+            status_code, response_body = session.get(path, media_type, headers)
 
-            body = response.body
+            log_attributes << "StatusCode: #{status_code}, ContentLength: #{response_body&.bytesize}"
 
-            logger.opt_debug "Received GET (URI: #{uri})"
-            logger.opt_data "Response body (Length: #{body.to_s.length}):\n#{body}"
+            logger.opt_debug "Received GET (#{log_attributes})"
+            logger.opt_data "Response body:\n#{response_body}"
 
-            return body, response
+            return response_body, status_code
           end
           alias :! :call # TODO: Remove deprecated actuator [Kelsey, Thu Oct 08 2015]
 
           def headers
             headers = {}
-            set_event_store_accept_header headers
             set_event_store_long_poll_header headers if long_poll
             headers
           end
 
           def media_type
             'application/vnd.eventstore.atom+json'
-          end
-
-          def set_event_store_accept_header(request)
-            request['Accept'] = media_type
           end
 
           def set_event_store_long_poll_header(request)

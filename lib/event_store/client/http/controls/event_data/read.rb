@@ -14,8 +14,8 @@ module EventStore
               reference_time = Time.example
 
               number ||= 0
-              type ||= Type.example
-              data ||= Data.example
+              type ||= EventData.type
+              data ||= EventData.data
               metadata = true if metadata.nil?
               stream_name ||= StreamName.reference
               position ||= number
