@@ -1,7 +1,7 @@
 module EventStore
   module Client
     module HTTP
-      class Session
+      module Session
         def self.build(settings=nil, _namespace=nil, namespace: nil)
           unless _namespace.nil?
             logger.obsolete "Positional parameter for namespace is obsolete; it has been replaced by a keyword argument"
