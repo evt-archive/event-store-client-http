@@ -19,7 +19,6 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'configure'
   s.add_runtime_dependency 'connection-client'
   s.add_runtime_dependency 'event_store-client'
-  s.add_runtime_dependency 'event_source'
   s.add_runtime_dependency 'event_source-event_store-http'
   s.add_runtime_dependency 'http-commands'
   s.add_runtime_dependency 'schema'
