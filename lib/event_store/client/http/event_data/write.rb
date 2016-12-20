@@ -18,6 +18,14 @@ module EventStore
 
             self.id = uuid.get
           end
+
+          def to_h
+            super.update(
+              :type => type,
+              :data => data,
+              :metadata => metadata
+            )
+          end
         end
       end
     end
