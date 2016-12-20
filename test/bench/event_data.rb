@@ -11,12 +11,9 @@ context "Event Data" do
     event_data = EventStore::Client::HTTP::EventData::Write.build
     event_data.assign_id
 
-    begin
-      event_data.assign_id
-    rescue EventStore::Client::HTTP::EventData::IdentityError => error
+    assert proc { event_data.assign_id } do
+      raises_error? EventStore::Client::HTTP::EventData::IdentityError
     end
-
-    assert error
   end
 
   test "Sequence is an alias for number" do
