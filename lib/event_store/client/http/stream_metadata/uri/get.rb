@@ -5,12 +5,12 @@ module EventStore
         module URI
           class Get
             dependency :logger, Telemetry::Logger
-            dependency :session, Session
+            dependency :session, EventSource::EventStore::HTTP::Session
 
             def self.build(session: nil)
               instance = new
 
-              Session.configure instance, session: session
+              EventSource::EventStore::HTTP::Session.configure instance, session: session
 
               Telemetry::Logger.configure instance
 
@@ -50,18 +50,21 @@ module EventStore
             end
 
             def get_stream_data(stream_name)
-              uri = session.build_uri "/streams/#{stream_name}"
+              path = "/streams/#{stream_name}"
 
-              logger.opt_trace "Retrieving stream data (URI: #{uri.to_s.inspect})"
+              log_attributes = "Path: #{path}"
 
-              response = ::HTTP::Commands::Get.(uri, headers, connection: session.connection)
+              logger.opt_trace "Retrieving stream data (#{log_attributes})"
 
-              logger.opt_debug "Received stream data response (Status: #{response.status_code}, Content Length: #{response['Content-Length']})"
+              status_code, response_body = session.get path, media_type
 
-              return nil if response.status_code == 404
+              log_attributes << ", StatusCode: #{status_code}, ContentLength: #{response_body&.bytesize}"
 
-              body = response.body
-              JSON.parse body
+              logger.opt_debug "Received stream data response (#{log_attributes})"
+
+              return nil if status_code == 404
+
+              JSON.parse response_body
             end
 
             def get_metadata_uri(stream_data)

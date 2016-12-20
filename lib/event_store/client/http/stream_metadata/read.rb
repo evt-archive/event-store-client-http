@@ -35,20 +35,23 @@ module EventStore
           end
 
           def call
-            logger.opt_trace "Retrieving stream metadata (URI: #{uri.to_s.inspect})"
+            path = uri.to_s
+
+            log_attributes = "Path: #{path}"
+            logger.opt_trace "Retrieving stream metadata (#{log_attributes})"
 
             if uri.nil?
-              logger.opt_debug "No stream metadata; stream does not exist (URI: #{uri.to_s.inspect})"
+              logger.opt_debug "No stream metadata; stream does not exist (#{log_attributes})"
               return nil
             end
 
-            response = Request::Retry.(session.connection) do
-              ::HTTP::Commands::Get.(uri, headers, connection: session.connection)
-            end
+            status_code, response_body = session.get(uri, media_type)
 
-            logger.opt_debug "Retrieved stream metadata (URI: #{uri.to_s.inspect}, Content Length: #{response['Content-Length']})"
+            log_attributes << ", StatusCode: #{status_code}, ContentLength: #{response_body&.bytesize}"
 
-            event_data = Serialize::Read.(response.body, EventData::Read, :json)
+            logger.opt_debug "Retrieved stream metadata (#{log_attributes})"
+
+            event_data = Serialize::Read.(response_body, EventData::Read, :json)
             metadata = event_data.data
 
             return {} if metadata.nil?
@@ -56,12 +59,6 @@ module EventStore
             logger.opt_data JSON.pretty_generate(metadata)
 
             metadata
-          end
-
-          def headers
-            {
-              'Accept' => media_type
-            }
           end
 
           def media_type

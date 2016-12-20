@@ -32,7 +32,7 @@ context "Configuring a Receiver of Read Stream Metadata" do
     update = EventStore::Client::HTTP::StreamMetadata::Read.build stream_name
 
     test "Session is set" do
-      assert update.session.is_a?(EventStore::Client::HTTP::Session)
+      assert update.session.is_a?(EventSource::EventStore::HTTP::Session)
     end
   end
 end
