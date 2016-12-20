@@ -39,7 +39,7 @@
         def write_batch(batch, stream_name, expected_version: nil)
           logger.opt_trace "Writing batch (Stream Name: #{stream_name}, Number of Events: #{batch.length}, Expected Version: #{!!expected_version ? expected_version : '(none)'})"
 
-          json_text = Serialize::Write.(batch, :json)
+          json_text = Transform::Write.(batch, :json)
           logger.opt_data "(#{json_text.class}) #{json_text}"
 
           path = path(stream_name)

@@ -24,14 +24,14 @@ module EventStore
             def self.data(id=nil, **arguments)
               event_data = self.example id, **arguments
 
-              Serialize::Write.raw_data event_data
+              Transform::Write.raw_data event_data
             end
 
             module JSON
               def self.text(data: nil, metadata: nil)
                 event_data = Write.example data: data, metadata: metadata
 
-                Serialize::Write.(event_data, :json)
+                Transform::Write.(event_data, :json)
               end
             end
           end

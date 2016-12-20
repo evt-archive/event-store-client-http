@@ -3,7 +3,7 @@ module EventStore
     module HTTP
       module EventData
         class Read
-          module Serializer
+          module Transformer
             def self.json
               JSON
             end
@@ -35,7 +35,7 @@ module EventStore
             end
 
             module JSON
-              def self.deserialize(text)
+              def self.read(text)
                 data = ::JSON.parse text, :symbolize_names => true
                 Casing::Underscore.(data)
               end

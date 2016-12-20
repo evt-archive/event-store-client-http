@@ -15,7 +15,7 @@ module EventStore
             module JSON
               def self.text
                 batch = Batch.example
-                Serialize::Write.(batch, :json)
+                Transform::Write.(batch, :json)
               end
             end
           end

@@ -2,7 +2,7 @@ require_relative 'bench_init'
 
 context "Deserialized Entry" do
   json_text = EventStore::Client::HTTP::Controls::EventData::Read::JSON.text
-  event_data = Serialize::Read.(json_text, EventStore::Client::HTTP::EventData::Read, :json)
+  event_data = Transform::Read.(json_text, EventStore::Client::HTTP::EventData::Read, :json)
 
   reference_time = EventStore::Client::HTTP::Controls::Time.example
 

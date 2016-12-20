@@ -2,7 +2,7 @@ require_relative 'bench_init'
 
 context "Stream Slice" do
   json_text = EventStore::Client::HTTP::Controls::Slice::JSON.text
-  slice = Serialize::Read.(json_text, EventStore::Client::HTTP::Slice, :json)
+  slice = Transform::Read.(json_text, EventStore::Client::HTTP::Slice, :json)
 
   context "Entries" do
     test "Data" do

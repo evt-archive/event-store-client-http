@@ -2,7 +2,7 @@ module EventStore
   module Client
     module HTTP
       class Slice
-        module Serializer
+        module Transformer
           def self.json
             JSON
           end
@@ -71,7 +71,7 @@ module EventStore
               end
             end
 
-            def self.deserialize(text)
+            def self.read(text)
               raw_data = ::JSON.parse text, object_class: ObjectClass
 
               raw_data[:entries].each do |entry|

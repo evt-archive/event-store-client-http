@@ -7,7 +7,7 @@ module EventStore
             def self.example(number=nil, **arguments)
               data = self.data(number, **arguments)
 
-              Serialize::Read.instance data, Client::HTTP::EventData::Read
+              Transform::Read.instance data, Client::HTTP::EventData::Read
             end
 
             def self.data(number=nil, type: nil, data: nil, metadata: nil, stream_name: nil, position: nil)

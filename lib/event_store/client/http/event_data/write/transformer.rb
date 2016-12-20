@@ -3,7 +3,7 @@ module EventStore
     module HTTP
       module EventData
         class Write
-          module Serializer
+          module Transformer
             def self.json
               JSON
             end
@@ -18,7 +18,7 @@ module EventStore
             end
 
             module JSON
-              def self.serialize(data)
+              def self.write(data)
                 formatted_data = Casing::Camel.(data)
                 ::JSON.pretty_generate formatted_data
               end
