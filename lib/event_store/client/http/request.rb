@@ -17,7 +17,7 @@ module EventStore
         module Build
           def build(session: nil)
             instance = new
-            EventSource::EventStore::HTTP::Session.configure instance, session: session
+            Session.configure instance, session: session
             instance
           end
         end

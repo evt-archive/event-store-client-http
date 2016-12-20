@@ -8,11 +8,15 @@ module EventStore
             namespace ||= _namespace
           end
 
+          settings ||= Settings.instance
+
           EventSource::EventStore::HTTP::Session.build settings, namespace: namespace
         end
 
         def self.configure(receiver, session: nil, attr_name: nil)
-          EventSource::EventStore::HTTP::Session.configure receiver, session: session, attr_name: attr_name
+          settings = Settings.instance
+
+          EventSource::EventStore::HTTP::Session.configure receiver, settings, session: session, attr_name: attr_name
         end
       end
     end
