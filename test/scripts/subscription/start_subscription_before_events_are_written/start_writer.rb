@@ -19,7 +19,7 @@ i = 0
 loop do
   i += 1
 
-  id = ::Controls::ID.get i
+  id = EventStore::Client::HTTP::Controls::ID.example i
   event_data = EventStore::Client::HTTP::Controls::EventData::Write.example id
   result = writer.write event_data, stream_name
 

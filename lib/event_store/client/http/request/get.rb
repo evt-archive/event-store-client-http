@@ -35,7 +35,7 @@ module EventStore
           end
 
           def set_event_store_long_poll_header(request)
-            request['ES-LongPoll'] = Defaults.long_poll_duration
+            request['ES-LongPoll'] = Defaults.long_poll_duration.to_s
           end
 
           def enable_long_poll
