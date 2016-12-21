@@ -109,6 +109,12 @@
           Telemetry::Logger.get self
         end
 
+        module Assertions
+          def session?(session)
+            request.session.equal? session
+          end
+        end
+
         module Defaults
           def self.embed
             'body'

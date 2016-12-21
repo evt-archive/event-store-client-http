@@ -52,6 +52,18 @@ module EventStore
           end
           logger.opt_debug "Read slice (Number of Entries: #{slice.length})"
         end
+
+        module Assertions
+          def self.extended(event_reader)
+            stream_reader = event_reader.stream_reader
+
+            stream_reader.extend stream_reader.class::Assertions
+          end
+
+          def session?(session)
+            stream_reader.session? session
+          end
+        end
       end
     end
   end

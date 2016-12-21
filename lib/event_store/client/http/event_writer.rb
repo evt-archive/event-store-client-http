@@ -70,6 +70,12 @@
         def self.logger
           @logger ||= Telemetry::Logger.get self
         end
+
+        module Assertions
+          def session?(session)
+            request.session.equal? session
+          end
+        end
       end
     end
   end
