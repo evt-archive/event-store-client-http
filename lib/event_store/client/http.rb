@@ -34,3 +34,4 @@ require 'event_store/client/http/reader'
 require 'event_store/client/http/subscription'
 
 require 'event_store/client/http/event_writer'
+require 'event_store/client/http/event_writer/defaults'

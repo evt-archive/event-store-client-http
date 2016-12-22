@@ -27,6 +27,12 @@ module EventStore
               raise ExpectedVersionError, error_message
             end
 
+            if status_code == 500 && reason_phrase == 'Write timeout'
+              error_message = "Write timeout (#{log_attributes})"
+              logger.error error_message
+              raise WriteTimeoutError, error_message
+            end
+
             if status_code != 201
               error_message = "Post command failed (#{log_attributes})"
               logger.error error_message
@@ -64,6 +70,7 @@ module EventStore
 
           ExpectedVersionError = Class.new RuntimeError
           Error = Class.new RuntimeError
+          WriteTimeoutError = Class.new RuntimeError
         end
       end
     end
