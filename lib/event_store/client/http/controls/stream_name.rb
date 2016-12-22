@@ -3,9 +3,11 @@ module EventStore
     module HTTP
       module Controls
         module StreamName
-          def self.get(category=nil)
+          def self.get(category=nil, id: nil, randomize_category: nil)
             EventSource::EventStore::HTTP::Controls::StreamName.example(
-              category: category
+              category: category,
+              id: id,
+              randomize_category: randomize_category
             )
           end
 
