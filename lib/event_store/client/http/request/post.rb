@@ -3,8 +3,6 @@ module EventStore
     module HTTP
       module Request
         class Post
-          configure :request
-
           include Telemetry::Logger::Dependency
 
           dependency :session, EventSource::EventStore::HTTP::Session
@@ -12,6 +10,14 @@ module EventStore
           def self.build(session: nil)
             instance = new
             Session.configure instance, session: session
+            instance
+          end
+
+          def self.configure(receiver, session: nil)
+            attr_name ||= :request
+
+            instance = build session: session
+            receiver.public_send "#{attr_name}=", instance
             instance
           end
 
