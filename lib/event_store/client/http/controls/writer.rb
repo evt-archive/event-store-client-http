@@ -14,7 +14,8 @@ module EventStore
 
             path = "/streams/#{stream_name}"
 
-            post = EventStore::Client::HTTP::Request::Post.build
+            session = Session.build
+            post = EventSource::EventStore::HTTP::Request::Post.build session: session
 
             iterations.times do |iteration|
               iteration += 1

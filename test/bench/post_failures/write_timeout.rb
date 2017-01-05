@@ -1,7 +1,8 @@
 require_relative '../bench_init'
 
 context "Posting event data fails, write timeout" do
-  post = EventStore::Client::HTTP::Request::Post.build
+  session = EventStore::Client::HTTP::Session.build
+  post = EventSource::EventStore::HTTP::Request::Post.build session: session
 
   session_substitute = SubstAttr::Substitute.(:session, post)
 

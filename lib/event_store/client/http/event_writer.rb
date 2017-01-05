@@ -2,14 +2,16 @@
   module Client
     module HTTP
       class EventWriter
-        dependency :request, EventStore::Client::HTTP::Request::Post
+        dependency :request, EventSource::EventStore::HTTP::Request::Post
         dependency :logger, Telemetry::Logger
 
         def self.build(session: nil)
           logger.opt_trace "Building event writer"
 
+          session ||= Session.build
+
           new.tap do |instance|
-            EventStore::Client::HTTP::Request::Post.configure instance, session: session
+            EventSource::EventStore::HTTP::Request::Post.configure instance, session: session
             Telemetry::Logger.configure instance
             logger.opt_debug "Built event writer"
           end
