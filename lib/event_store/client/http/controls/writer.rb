@@ -25,7 +25,7 @@ module EventStore
 
               json_text = Transform::Write.(event_data, :json)
 
-              post_response = post.(json_text, path)
+              post_response = post.(path, json_text)
             end
 
             if stream_metadata

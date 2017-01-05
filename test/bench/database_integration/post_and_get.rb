@@ -7,7 +7,7 @@ context "Posting event data" do
   data = EventStore::Client::HTTP::Controls::EventData::Batch::JSON.text
 
   post = EventStore::Client::HTTP::Request::Post.build
-  post_status_code = post.(data, path)
+  post_status_code = post.(path, data)
 
   get = EventStore::Client::HTTP::Request::Get.build
   body_text, get_status_code = get.("#{path}/0")

@@ -49,7 +49,7 @@
           retry_delay = Defaults.retry_delay
 
           begin
-            request.(json_text, path, expected_version: expected_version).tap do |instance|
+            request.(path, json_text, expected_version: expected_version).tap do |instance|
               logger.opt_debug "Wrote batch (Stream Name: #{stream_name}, Path: #{path}, Number of Events: #{batch.length}, Expected Version: #{!!expected_version ? expected_version : '(none)'})"
             end
           rescue Request::Post::WriteTimeoutError => error
