@@ -3,7 +3,17 @@ module EventStore
     module HTTP
       module Request
         class Post
-          include Request
+          configure :request
+
+          include Telemetry::Logger::Dependency
+
+          dependency :session, EventSource::EventStore::HTTP::Session
+
+          def self.build(session: nil)
+            instance = new
+            Session.configure instance, session: session
+            instance
+          end
 
           def call(data, path, expected_version: nil)
             log_attributes = "Path: #{path}, ExpectedVersion: #{expected_version.inspect}"

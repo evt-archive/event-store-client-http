@@ -20,7 +20,6 @@ require 'event_store/client/http/event_data/write/transformer'
 require 'event_store/client/http/event_data/batch'
 
 require 'event_store/client/http/session'
-require 'event_store/client/http/request'
 require 'event_store/client/http/request/post'
 require 'event_store/client/http/request/get'
 

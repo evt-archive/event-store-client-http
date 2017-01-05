@@ -3,9 +3,19 @@ module EventStore
     module HTTP
       module Request
         class Get
-          include Request
+          configure :request
+
+          include Telemetry::Logger::Dependency
+
+          dependency :session, EventSource::EventStore::HTTP::Session
 
           attr_accessor :long_poll
+
+          def self.build(session: nil)
+            instance = new
+            Session.configure instance, session: session
+            instance
+          end
 
           def call(path)
             log_attributes = "Path: #{path}"
