@@ -61,9 +61,11 @@ module EventStore
                   number ||= 0
                   stream_name ||= StreamName.reference
 
-                  "http://localhost:2113/streams/#{stream_name}/#{number}"
+                  "http://#{IPAddress.example}:2113/streams/#{stream_name}/#{number}"
                 end
               end
+
+              IPAddress = EventSource::EventStore::HTTP::Controls::IPAddress
             end
           end
         end
