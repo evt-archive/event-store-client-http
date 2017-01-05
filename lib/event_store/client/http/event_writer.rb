@@ -11,7 +11,9 @@
           session ||= Session.build
 
           new.tap do |instance|
-            EventSource::EventStore::HTTP::Request::Post.configure instance, session: session
+            post = EventSource::EventStore::HTTP::Request::Post.configure instance, session: session
+            post.require_leader
+
             Telemetry::Logger.configure instance
             logger.opt_debug "Built event writer"
           end
