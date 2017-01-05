@@ -15,9 +15,14 @@ module EventStore
 
             reason_phrase = nil
 
-            status_code = session.post(path, data, media_type, headers) do |response|
-              reason_phrase = response.message
-            end
+            request = Net::HTTP::Post.new path, headers
+            request['Content-Type'] = media_type
+            request.body = data
+
+            response = session.(request)
+
+            status_code = response.code.to_i
+            reason_phrase = response.message
 
             log_attributes << ", StatusCode: #{status_code}, ReasonPhrase: #{reason_phrase}"
 
@@ -68,9 +73,9 @@ module EventStore
             request['ES-ExpectedVersion'] = expected_version.to_s
           end
 
-          ExpectedVersionError = Class.new RuntimeError
-          Error = Class.new RuntimeError
-          WriteTimeoutError = Class.new RuntimeError
+          Error = EventSource::EventStore::HTTP::Request::Post::Error
+          ExpectedVersionError = EventSource::EventStore::HTTP::Request::Post::ExpectedVersionError
+          WriteTimeoutError = EventSource::EventStore::HTTP::Request::Post::WriteTimeoutError
         end
       end
     end

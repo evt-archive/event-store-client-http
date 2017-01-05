@@ -13,7 +13,13 @@ module EventStore
 
             headers = self.headers
 
-            status_code, response_body = session.get(path, media_type, headers)
+            request = Net::HTTP::Get.new path, headers
+            request['Accept'] = media_type
+
+            response = session.(request)
+
+            status_code = response.code.to_i
+            response_body = response.body if (200..399).include? status_code
 
             log_attributes << "StatusCode: #{status_code}, ContentLength: #{response_body&.bytesize}"
 
