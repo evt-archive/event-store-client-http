@@ -57,7 +57,7 @@
               logger.opt_debug "Wrote batch (Stream Name: #{stream_name}, Path: #{path}, Number of Events: #{batch.length}, Expected Version: #{!!expected_version ? expected_version : '(none)'})"
             end
           rescue Request::Post::WriteTimeoutError => error
-            logger.warn "Stream Name: #{stream_name}, Path: #{path}, Number of Events: #{batch.length}, Expected Version: #{!!expected_version ? expected_version : '(none)'}, RetryCount: #{retry_count}/#{retry_limit}"
+            logger.warn "Write timeout (Stream Name: #{stream_name}, Path: #{path}, Number of Events: #{batch.length}, Expected Version: #{!!expected_version ? expected_version : '(none)'}, RetryCount: #{retry_count}/#{retry_limit})"
 
             raise error if retry_count >= 3
 
