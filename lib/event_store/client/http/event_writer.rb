@@ -2,14 +2,18 @@
   module Client
     module HTTP
       class EventWriter
-        dependency :request, EventStore::Client::HTTP::Request::Post
+        dependency :request, EventSource::EventStore::HTTP::Request::Post
         dependency :logger, Telemetry::Logger
 
         def self.build(session: nil)
           logger.opt_trace "Building event writer"
 
+          session ||= Session.build
+
           new.tap do |instance|
-            EventStore::Client::HTTP::Request::Post.configure instance, session: session
+            post = EventSource::EventStore::HTTP::Request::Post.configure instance, session: session
+            post.require_leader
+
             Telemetry::Logger.configure instance
             logger.opt_debug "Built event writer"
           end
@@ -49,11 +53,11 @@
           retry_delay = Defaults.retry_delay
 
           begin
-            request.(json_text, path, expected_version: expected_version).tap do |instance|
+            request.(path, json_text, expected_version: expected_version).tap do |instance|
               logger.opt_debug "Wrote batch (Stream Name: #{stream_name}, Path: #{path}, Number of Events: #{batch.length}, Expected Version: #{!!expected_version ? expected_version : '(none)'})"
             end
           rescue Request::Post::WriteTimeoutError => error
-            logger.warn "Stream Name: #{stream_name}, Path: #{path}, Number of Events: #{batch.length}, Expected Version: #{!!expected_version ? expected_version : '(none)'}, RetryCount: #{retry_count}/#{retry_limit}"
+            logger.warn "Write timeout (Stream Name: #{stream_name}, Path: #{path}, Number of Events: #{batch.length}, Expected Version: #{!!expected_version ? expected_version : '(none)'}, RetryCount: #{retry_count}/#{retry_limit})"
 
             raise error if retry_count >= 3
 

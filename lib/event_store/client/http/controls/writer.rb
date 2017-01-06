@@ -14,7 +14,8 @@ module EventStore
 
             path = "/streams/#{stream_name}"
 
-            post = EventStore::Client::HTTP::Request::Post.build
+            session = Session.build
+            post = EventSource::EventStore::HTTP::Request::Post.build session: session
 
             iterations.times do |iteration|
               iteration += 1
@@ -25,7 +26,7 @@ module EventStore
 
               json_text = Transform::Write.(event_data, :json)
 
-              post_response = post.(json_text, path)
+              post_response = post.(path, json_text)
             end
 
             if stream_metadata

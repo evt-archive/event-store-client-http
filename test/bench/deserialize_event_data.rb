@@ -33,7 +33,7 @@ context "Deserialized Entry" do
   context "Links" do
     test "Edit" do
       edit_uri = event_data.links.edit_uri
-      assert(edit_uri == 'http://localhost:2113/streams/someStream/0')
+      assert(edit_uri == 'http://127.0.0.1:2113/streams/someStream/0')
     end
   end
 end

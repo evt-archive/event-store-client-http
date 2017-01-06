@@ -10,7 +10,7 @@
 
         attr_accessor :next_uri
 
-        dependency :request, EventStore::Client::HTTP::Request::Get
+        dependency :request, EventSource::EventStore::HTTP::Request::Get
         dependency :logger, Telemetry::Logger
 
         def initialize(stream_name, start_path, direction)
@@ -23,6 +23,7 @@
           slice_size ||= Defaults.slice_size
           direction ||= Defaults.direction
           starting_position ||= Defaults.starting_position(direction)
+          session ||= Session.build
 
           logger.opt_trace "Building stream reader (Stream Name: #{stream_name}, Starting Position: #{starting_position}, Slice Size: #{slice_size}, Direction: #{direction})"
 
@@ -30,7 +31,7 @@
           logger.opt_debug "Starting URI: #{start_path}"
 
           new(stream_name, start_path, direction).tap do |instance|
-            EventStore::Client::HTTP::Request::Get.configure instance, session: session
+            EventSource::EventStore::HTTP::Request::Get.configure instance, session: session
 
             Telemetry::Logger.configure instance
             logger.opt_debug "Built stream reader (Stream Name: #{stream_name}, Position: #{starting_position}, Slice Size: #{slice_size}, Direction: #{direction})"
