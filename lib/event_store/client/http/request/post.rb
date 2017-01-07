@@ -4,7 +4,7 @@ module EventStore
       module Request
         module Post
           Error = EventSource::EventStore::HTTP::Request::Post::Error
-          ExpectedVersionError = EventSource::EventStore::HTTP::Request::Post::ExpectedVersionError
+          ExpectedVersionError = EventSource::ExpectedVersion::Error
           WriteTimeoutError = EventSource::EventStore::HTTP::Request::Post::WriteTimeoutError
         end
       end
