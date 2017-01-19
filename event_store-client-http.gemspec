@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.files = Dir.glob('{lib}/**/*')
   s.platform = Gem::Platform::RUBY
 
-  s.add_runtime_dependency 'evt-event_source-event_store-http'
+  s.add_runtime_dependency 'evt-event_source-event_store-http', '~> 0.2.0'
 
   s.add_development_dependency 'test_bench'
 end
